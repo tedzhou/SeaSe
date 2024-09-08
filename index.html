@@ -95,10 +95,10 @@ function displayInfo() {
     if (groupInfo) {
         const [group, {middleSchools}] = groupInfo;
         const middleSchoolLinks = middleSchools.map(school => 
-            `<a href="//uri.amap.com/search?keyword=${encodeURIComponent(school)}&city=Guangzhou&src=mypage&callnative=1" target="_blank">${school}</a>`
+            `<a href="//uri.amap.com/search?keyword=${encodeURIComponent(school)}&city=Guangzhou&src=mypage&callnative=1&view=map" target="_blank">${school}</a>`
         ).join('<br>');
         resultDiv.innerHTML = `
-            <h2><a href="//uri.amap.com/search?keyword=${encodeURIComponent(schoolName)}&city=Guangzhou&src=mypage&callnative=1" target="_blank">${schoolName}</a> 所在的分组是 ${group}</h2>
+            <h2><a href="//uri.amap.com/search?keyword=${encodeURIComponent(schoolName)}&city=Guangzhou&src=mypage&callnative=1&view=map" target="_blank">${schoolName}</a> 所在的分组是 ${group}</h2>
             <strong>对应的初中:</strong><br>${middleSchoolLinks}
         `;
     } else {
