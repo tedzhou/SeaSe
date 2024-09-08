@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Grouping Data Input</title>
+<style>
+    body { font-family: Arial, sans-serif; }
+    input, button { width: 100%; padding: 10px; margin: 10px 0; }
+    button { cursor: pointer; }
+</style>
+</head>
+<body>
+<h1>输入学校分组信息</h1>
+<label for="group">组别:</label>
+<input type="text" id="group" placeholder="输入组别">
+
+<label for="middleSchools">初中学校列表 (换行、空格或顿号分割):</label>
+<input type="text" id="middleSchools" placeholder="广州市第五中学、广州市第二十六中学">
+
+<label for="elementarySchools">小学列表 (换行、空格或顿号分割):</label>
+<input type="text" id="elementarySchools" placeholder="万松园小学、前进路小学">
+
+<button onclick="addData()">添加数据</button>
+<button onclick="downloadData()">下载JSON</button>
+
+<h2>JSON 数据:</h2>
+<pre id="jsonOutput"></pre>
+
+<script>
+let data = {};
+
+function splitInput(input) {
+    // 检查是否有换行
+    if (input.includes('\n')) {
+        return input.split('\n');
+    }
+    // 检查是否有空格
+    if (input.includes(' ')) {
+        return input.split(/\s+/);
+    }
+    // 默认按顿号分割
+    return input.split('、');
+}
+
+function addData() {
+    const group = document.getElementById('group').value.trim();
+    const middleSchoolsInput = document.getElementById('middleSchools').value;
+    const elementarySchoolsInput = document.getElementById('elementarySchools').value;
+    const middleSchools = splitInput(middleSchoolsInput).map(s => s.trim());
+    const elementarySchools = splitInput(elementarySchoolsInput).map(s => s.trim());
+
+    if (group && middleSchools.length && elementarySchools.length) {
+        data[group] = { middleSchools, elementarySchools };
+        document.getElementById('jsonOutput').textContent = JSON.stringify(data, null, 2);
+    } else {
+        alert('请确保所有字段都已正确填写！');
+    }
+    document.getElementById('group').value = '';
+    document.getElementById('middleSchools').value = '';
+    document.getElementById('elementarySchools').value = '';
+}
+
+function downloadObjectAsJson(exportObj, exportName){
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+    var downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href",     dataStr);
+    downloadAnchorNode.setAttribute("download", exportName +  ".json");
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
+
+function downloadData() {
+    downloadObjectAsJson(data, "school_grouping_data");
+}
+</script>
+</body>
+</

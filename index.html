@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Grouping Selector</title>
+<style>
+    body { font-family: Arial, sans-serif; }
+    select, button { width: 100%; padding: 10px; margin: 10px 0; }
+    button { cursor: pointer; }
+    a { margin-right: 5px; text-decoration: none; color: blue; }
+    a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<h1>广州小学反查初中分组</h1>
+<label for="district">选择区域:</label>
+<select id="district" onchange="loadSchools()">
+    <option value="">请选择区域</option>
+    <option value="liwan">荔湾区</option>
+    <option value="haizu">海珠区</option>
+</select>
+
+<label for="school">选择小学:</label>
+<select id="school" onchange="displayInfo()">
+    <option value="">请选择小学</option>
+</select>
+
+<div id="result">
+    <h2>分组信息将在这里显示</h2>
+</div>
+
+<script>
+let liwanData;
+let haizuData;
+
+function loadSchools() {
+    const district = document.getElementById('district').value;
+    const schoolSelect = document.getElementById('school');
+    schoolSelect.innerHTML = '<option value="">请选择小学</option>'; // 清空现有选项
+
+    if (district === 'liwan' && liwanData) {
+        updateSchools(liwanData);
+    } else if (district === 'haizu' && haizuData) {
+        updateSchools(haizuData);
+    } else {
+        if (district === 'liwan') {
+            fetch('liwan.json')
+                .then(response => response.json())
+                .then(data => {
+                    liwanData = data;
+                    updateSchools(data);
+                });
+        } else if (district === 'haizu') {
+            fetch('haizu.json')
+                .then(response => response.json())
+                .then(data => {
+                    haizuData = data;
+                    updateSchools(data);
+                });
+        }
+    }
+}
+
+function updateSchools(data) {
+    const schoolSelect = document.getElementById('school');
+    const schools = Object.values(data).reduce((acc, group) => {
+        group.elementarySchools.forEach(school => {
+            if (!acc.includes(school)) {
+                acc.push(school);
+            }
+        });
+        return acc;
+    }, []);
+    schools.sort(); // Sort schools alphabetically
+    schools.forEach(school => {
+        const option = document.createElement('option');
+        option.value = school;
+        option.textContent = school;
+        schoolSelect.appendChild(option);
+    });
+}
+
+function displayInfo() {
+    const schoolName = document.getElementById('school').value;
+    const resultDiv = document.getElementById('result');
+    if (!schoolName) {
+        resultDiv.innerHTML = '<h2>请先选择一个小学</h2>';
+        return;
+    }
+
+    const selectedDistrict = document.getElementById('district').value;
+    const data = selectedDistrict === 'liwan' ? liwanData : haizuData;
+    const groupInfo = Object.entries(data).find(([group, {elementarySchools}]) => elementarySchools.includes(schoolName));
+    if (groupInfo) {
+        const [group, {middleSchools}] = groupInfo;
+        const middleSchoolLinks = middleSchools.map(school => 
+            `<a href="//uri.amap.com/search?keyword=${encodeURIComponent(school)}&city=Guangzhou&src=mypage" target="_blank">${school}</a>`
+        ).join('<br>');
+        resultDiv.innerHTML = `
+            <h2><a href="//uri.amap.com/search?keyword=${encodeURIComponent(schoolName)}&city=Guangzhou&src=mypage" target="_blank">${schoolName}</a> 所在的分组是 ${group}</h2>
+            <strong>对应的初中:</strong><br>${middleSchoolLinks}
+        `;
+    } else {
+        resultDiv.innerHTML = `<h2>${schoolName} 没有找到对应的分组信息。</h2>`;
+    }
+}
+
+document.getElementById('district').addEventListener('change', loadSchools);
+</script>
+</body>
+</html>
