@@ -59,7 +59,7 @@
 <a class="snap" style="display: none;">https://site.tedzhou.tech/static/sease</a>
 
 <h2>0. 楼盘名称</h2>
-<input type="text" id="houseName" placeholder="请输入楼盘名称" onchange="writenav('广州T.I.T创意园')">
+<input type="text" id="houseName" placeholder="请输入楼盘名称">
 
 <h2>1. 学位确认</h2>
 <p>请询问中介该房产对应的小学，以便查阅初中属于哪个分组，从而估算孩子就读优质学校的概率。</p>
@@ -110,7 +110,8 @@
 <h2>3. 交通检查</h2>
 <p>请检查房产周边的交通情况，确保通勤便利。</p>
 <div id="nav" style="display: none;">
-    <a id="navlink" href="">导航到广州T.I.T创意园</a>
+    <a href="iosamap://path?sourceApplication=applicationName&dname=广州T.I.T创意园">导航到广州T.I.T创意园</a>
+    <a href="iosamap://path?sourceApplication=applicationName&dname=广州阿里中心">导航到广州阿里中心</a>
 </div>
 
 <label for="">地铁通行时间:</label>
@@ -134,29 +135,12 @@
 </select>
 
 <script>
-    function writenav(dest) {
-        if (navigator.userAgent.indexOf("iPhone") > 0) {
-            var from = document.getElementById('houseName').value;
-            if (from && from.length > 0) {
-                var src = "iosamap://path?sourceApplication=applicationName&sname="+from+"&dname="+dest+"&dev=0&t=0";
-                document.getElementById("navlink").href = src;
-                document.getElementById("nav").style.display = "block";
-            } else {
-                document.getElementById("nav").style.display = "none";
-            }
-        }
+(function () {
+    if (navigator.userAgent.indexOf("iPhone") > 0) {
+        document.getElementById("nav").style.display = "block";
     }
+})();
 
-    function navlink() {
-        var from = document.getElementById('houseName').value;
-        if (from && from.length > 0) {
-            var src = "https://apis.map.qq.com/uri/v1/routeplan?type=bus&from=广州"+from+"&to="+"广州T.I.T创意园"+"&type=bus&policy=1&referer=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77";
-            document.getElementById("navifram").src = src;
-            document.getElementById("navifram").style.display = "block";
-        } else {
-            document.getElementById("navifram").style.display = "none";
-        }
-    }
 let liwanData;
 let haizuData;
 function loadSchools() {
