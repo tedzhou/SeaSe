@@ -3,23 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>School Grouping Selector</title>
+<title>看房check list</title>
 <style>
     body { font-family: Arial, sans-serif; }
-/*     select, button { width: 100%; padding: 10px; margin: 10px 0; } */
+    select, button, input[type="text"] { width: 100%; padding: 10px; margin: 10px 0; }
     button { cursor: pointer; }
     a { margin-right: 5px; text-decoration: none; color: blue; }
     a:hover { text-decoration: underline; }
+    p { font-size: 16px; color: #666; }
+    h2 { color: #333; }
+    h3 { color: #666; }
 </style>
 </head>
 <body>
-<h1>广州小学反查初中分组</h1>
+
+<h1>看房check list</h1>
+<h2>1. 学位确认</h2>
+<p>请询问中介该房产对应的小学，以便查阅初中属于哪个分组，从而估算孩子就读优质学校的概率。</p>
 <label for="district">选择区域:</label>
 <select id="district" onchange="loadSchools()">
     <option value="">请选择区域</option>
     <option value="liwan">荔湾区</option>
     <option value="haizu">海珠区</option>
 </select>
+<br>
 
 <label for="school">选择小学:</label>
 <select id="school" onchange="displayInfo()">
@@ -27,13 +34,39 @@
 </select>
 
 <div id="result">
-    <h2>分组信息将在这里显示</h2>
+    <h2></h2>
 </div>
+
+<!-- 房子价值计算 -->
+<h2>2. 房子价值计算</h2>
+<p>房子价值估算公式为：<br>
+  <strong>房子价值 = 年租金 * 30 + 学位价值</strong><br>
+  其中年租金 = 月租金 * 12
+</p>
+<label for="monthlyRent">租金 (元/月):</label>
+<input type="text" id="monthlyRent" placeholder="请输入租金">
+<br>
+
+<label for="price">总房价 (万元):</label>
+<input type="text" id="price" placeholder="请输入总房价">
+<br>
+
+<label for="schoolValue">学位估值 (万元):</label>
+<input type="text" id="schoolValue" placeholder="请输入学位估值">
+<br>
+
+<button onclick="calculateHouseValue()">估算房屋价值</button>
+<div id="houseValueResult"></div>
+
+<!-- 交通导航 -->
+<h2>3. 交通检查</h2>
+<p>请检查房产周边的交通情况，确保通勤便利。</p>
+<a href="//uri.amap.com/search?keyword=广州T.I.T创意园&city=Guangzhou&src=mypage&callnative=1&view=map" target="_blank">导航到广州T.I.T创意园</a>
+<a href="//uri.amap.com/search?keyword=阿里中心·广州琶洲&city=Guangzhou&src=mypage&callnative=1&view=map" target="_blank">导航到阿里阿里中心·广州琶洲</a>
 
 <script>
 let liwanData;
 let haizuData;
-
 function loadSchools() {
     const district = document.getElementById('district').value;
     const schoolSelect = document.getElementById('school');
@@ -85,7 +118,7 @@ function displayInfo() {
     const schoolName = document.getElementById('school').value;
     const resultDiv = document.getElementById('result');
     if (!schoolName) {
-        resultDiv.innerHTML = '<h2>请先选择一个小学</h2>';
+        resultDiv.innerHTML = '<h3>请先选择一个小学</h3>';
         return;
     }
 
@@ -102,8 +135,18 @@ function displayInfo() {
             <strong>对应的初中:</strong><br>${middleSchoolLinks}
         `;
     } else {
-        resultDiv.innerHTML = `<h2>${schoolName} 没有找到对应的分组信息。</h2>`;
+        resultDiv.innerHTML = `<h3>${schoolName} 没有找到对应的分组信息。</h3>`;
     }
+}
+function calculateHouseValue() {
+    // let million = 1000000;
+    let wan = 10 * 1000;
+    const monthlyRent = parseFloat(document.getElementById('monthlyRent').value);
+    const schoolValue = parseFloat(document.getElementById('schoolValue').value) * wan;
+    const totalHousePrice = parseFloat(document.getElementById('price').value) * wan;
+    let houseValue = (monthlyRent * 12 * 30) + schoolValue;
+    let premium = ((totalHousePrice - houseValue) / houseValue) * 100;
+    document.getElementById('houseValueResult').innerHTML = `房子价值: ${(houseValue / wan).toFixed(2)}万元<br>溢价: ${premium.toFixed(2)}%`;
 }
 
 document.getElementById('district').addEventListener('change', loadSchools);
