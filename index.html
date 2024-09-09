@@ -109,9 +109,9 @@
 <!-- 交通导航 -->
 <h2>3. 交通检查</h2>
 <p>请检查房产周边的交通情况，确保通勤便利。</p>
-<button onclick="navlink('//uri.amap.com/search?keyword=广州T.I.T创意园&city=Guangzhou&src=mypage&callnative=1&view=map')">导航到广州T.I.T创意园</button>
+<button onclick="navlink('https://apis.map.qq.com/uri/v1/search?keyword=广州T.I.T创意园&region=广州')">导航到广州T.I.T创意园</button>
 <br>
-<button onclick="navlink('//uri.amap.com/search?keyword=阿里中心·广州琶洲&city=Guangzhou&src=mypage&callnative=1&view=map')">导航到阿里阿里中心·广州琶洲</button>
+<button onclick="navlink('https://apis.map.qq.com/uri/v1/search?keyword=阿里中心·广州琶洲&region=广州')">导航到阿里阿里中心·广州琶洲</button>
 <br>
 <iframe id="navifram" src="" style="display: none;width: 100%;height: 500px;"></iframe>
 <label for="">地铁通行时间:</label>
@@ -207,10 +207,10 @@ function displayInfo() {
     if (groupInfo) {
         const [group, {middleSchools}] = groupInfo;
         const middleSchoolLinks = middleSchools.map(school => 
-            `<a href="//uri.amap.com/search?keyword=${encodeURIComponent(school)}&city=Guangzhou&src=mypage&callnative=1&view=map" target="_blank">${school}</a>`
-        ).join('<br>');
+            `<p>${school}</p>`
+        ).join('');
         resultDiv.innerHTML = `
-            <h2><a href="//uri.amap.com/search?keyword=${encodeURIComponent(schoolName)}&city=Guangzhou&src=mypage&callnative=1&view=map" target="_blank">${schoolName}</a> 所在的分组是 ${group}</h2>
+            <h3>${schoolName} 所在的分组是 ${group}</h3>
             <strong>对应的初中:</strong><br>${middleSchoolLinks}
         `;
     } else {
