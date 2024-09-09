@@ -32,11 +32,21 @@
     p { font-size: 16px; color: #666; }
     h2 { color: #333; }
     h3 { color: #666; }
+    #saveImageButton { margin-top: 20px; }
+    #snapshotImage {
+        width: 50%;
+        height: auto;
+        margin-top: 20px;
+        border: 1px solid #ddd;
+    }
 </style>
 </head>
 <body>
 
 <h1>看房check list</h1>
+<h2>0. 楼盘名称</h2>
+<input type="text" id="" placeholder="请输入楼盘名称">
+
 <h2>1. 学位确认</h2>
 <p>请询问中介该房产对应的小学，以便查阅初中属于哪个分组，从而估算孩子就读优质学校的概率。</p>
 <label for="district">选择区域:</label>
@@ -177,16 +187,16 @@ function calculateHouseValue() {
 document.getElementById('district').addEventListener('change', loadSchools);
 </script>
 <button id="saveImageButton">保存页面为图片</button>
-
+<img id="snapshotImage" src="" alt="页面快照" style="display: none;">
 <script src="html2canvas.js"></script>
 <script>
 document.getElementById('saveImageButton').addEventListener('click', function() {
     html2canvas(document.body).then(canvas => {
         const image = canvas.toDataURL('image/png');
-        const link = document.createElement('a');
-        link.download = 'page_snapshot.png';
-        link.href = image;
-        link.click();
+        document.getElementById('snapshotImage').src = image;
+        document.getElementById('snapshotImage').style = "";
+
+        alert('图片已生成，长按图片保存到相册');
     });
 });
 </script>
