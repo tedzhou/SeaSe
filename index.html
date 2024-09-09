@@ -176,5 +176,19 @@ function calculateHouseValue() {
 
 document.getElementById('district').addEventListener('change', loadSchools);
 </script>
+<button id="saveImageButton">保存页面为图片</button>
+
+<script src="html2canvas.js"></script>
+<script>
+document.getElementById('saveImageButton').addEventListener('click', function() {
+    html2canvas(document.body).then(canvas => {
+        const image = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = 'page_snapshot.png';
+        link.href = image;
+        link.click();
+    });
+});
+</script>
 </body>
 </html>
