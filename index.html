@@ -5,8 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>看房check list</title>
 <style>
+    input[type="text"], select, button {
+        -webkit-appearance: none; /* 移除iOS默认的外观 */
+        -webkit-text-size-adjust: 100%; /* 禁止iOS自动调整字体大小 */
+        font-size: 16px; /* 设置合适的字体大小 */
+    }
+
+    /* 可选：如果您想要全局禁止zoom，可以添加以下样式 */
+    html {
+        touch-action: manipulation; /* 禁止双击缩放 */
+        -webkit-text-size-adjust: 100%; /* 禁止iOS自动调整字体大小 */
+    }
+
     body { font-family: Arial, sans-serif; }
-    select, button, input[type="text"] { width: 100%; padding: 10px; margin: 10px 0; }
+    select, button, input[type="text"] { width: 100%; padding: 10px; margin: 10px 0; height: 60px;}
     button { cursor: pointer; }
     a { margin-right: 5px; text-decoration: none; color: blue; }
     a:hover { text-decoration: underline; }
