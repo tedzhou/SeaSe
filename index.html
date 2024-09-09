@@ -203,10 +203,14 @@ document.getElementById('district').addEventListener('change', loadSchools);
 <script src="html2canvas.js"></script>
 <script>
 document.getElementById('saveImageButton').addEventListener('click', function() {
+    document.getElementById('saveImageButton').style.display = "none";
+    document.getElementById('snapshotImageContainer').style.display = "none";
     html2canvas(document.body).then(canvas => {
         const image = canvas.toDataURL('image/png');
         document.getElementById('snapshotImage').src = image;
         document.getElementById('snapshotImageContainer').style.display = "block";
+        document.getElementById('saveImageButton').style.display = "block";
+
         // alert('图片已生成，长按图片保存到相册');
         var delay = 500;
 
