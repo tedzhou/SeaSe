@@ -138,7 +138,7 @@
         if (navigator.userAgent.indexOf("iPhone") > 0) {
             var from = document.getElementById('houseName').value;
             if (from && from.length > 0) {
-                var src = "iosamap://path?sourceApplication=applicationName&sid=&slat=39.92848272&slon=116.39560823&sname="+from+"&dname="+dest+"&dev=0&t=0";
+                var src = "iosamap://path?sourceApplication=applicationName&sname="+from+"&dname="+dest+"&dev=0&t=0";
                 document.getElementById("navlink").href = src;
                 document.getElementById("nav").style.display = "block";
             } else {
