@@ -37,7 +37,16 @@
         width: 50%;
         height: auto;
         margin-top: 20px;
-        border: 1px solid #ddd;
+        border: 5px solid #ddd;
+    }
+    #snapshotImageContainer {
+        text-align: center;
+        color: crimson;
+        position: relative;
+        display: none;
+    }
+    p.notice {
+        color: crimson;
     }
 </style>
 </head>
@@ -187,16 +196,26 @@ function calculateHouseValue() {
 document.getElementById('district').addEventListener('change', loadSchools);
 </script>
 <button id="saveImageButton">保存页面为图片</button>
-<img id="snapshotImage" src="" alt="页面快照" style="display: none;">
+<div id="snapshotImageContainer">
+    <p class="notice"> ↓↓ 长按下面图片保存相册 ↓↓</p>
+    <img id="snapshotImage" src="" alt="页面快照">
+</div>
 <script src="html2canvas.js"></script>
 <script>
 document.getElementById('saveImageButton').addEventListener('click', function() {
     html2canvas(document.body).then(canvas => {
         const image = canvas.toDataURL('image/png');
         document.getElementById('snapshotImage').src = image;
-        document.getElementById('snapshotImage').style = "";
+        document.getElementById('snapshotImageContainer').style.display = "block";
+        // alert('图片已生成，长按图片保存到相册');
+        var delay = 500;
 
-        alert('图片已生成，长按图片保存到相册');
+        // 使用setTimeout延迟执行滚动操作
+        setTimeout(function() {
+            // 滚动到页面的最底部
+            window.scrollTo(0, document.body.scrollHeight);
+        }, delay);
+        
     });
 });
 </script>
