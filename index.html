@@ -59,7 +59,7 @@
 <a class="snap" style="display: none;">https://site.tedzhou.tech/static/sease</a>
 
 <h2>0. 楼盘名称</h2>
-<input type="text" id="" placeholder="请输入楼盘名称">
+<input type="text" id="houseName" placeholder="请输入楼盘名称">
 
 <h2>1. 学位确认</h2>
 <p>请询问中介该房产对应的小学，以便查阅初中属于哪个分组，从而估算孩子就读优质学校的概率。</p>
@@ -109,12 +109,10 @@
 <!-- 交通导航 -->
 <h2>3. 交通检查</h2>
 <p>请检查房产周边的交通情况，确保通勤便利。</p>
-<button onclick="navlink('https://apis.map.qq.com/uri/v1/search?keyword=广州T.I.T创意园&region=广州')">导航到广州T.I.T创意园</button>
-<br>
-<button onclick="navlink('https://apis.map.qq.com/uri/v1/search?keyword=阿里中心·广州琶洲&region=广州')">导航到阿里阿里中心·广州琶洲</button>
-<br>
+<button onclick="navlink()">导航到广州T.I.T创意园</button>
 <iframe id="navifram" src="" style="display: none;width: 100%;height: 500px;"></iframe>
-<label for="">地铁通行时间:</label>
+
+<!-- <label for="">地铁通行时间:</label>
 <br>
 <select id="metro_time">
     <option value="">请选择</option>
@@ -132,14 +130,16 @@
     <option value="">60min内</option>
     <option value="">90min内</option>
     <option value="">太远啦</option>
-</select>
+</select> -->
 
 <script>
-    function navlink(src){
-        document.getElementById("navifram").src = src;
-        if (src && src.length > 0) {
-            document.getElementById("navifram").src = src;
-            document.getElementById("navifram").style.display = "block";
+    function navlink() {
+        debugger;
+        var from = document.getElementById('houseName').value;
+        if (from && from.length > 0) {
+            var src = "https://apis.map.qq.com/uri/v1/routeplan?type=bus&from="+from+"&to="+"广州T.I.T创意园"+"&type=bus&policy=1&referer=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77";
+            document.getElementById("navifram1").src = src;
+            document.getElementById("navifram1").style.display = "block";
         } else {
             document.getElementById("navifram").style.display = "none";
         }
