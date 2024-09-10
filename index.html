@@ -5,57 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>看房check list</title>
 <style>
-    /* 可选：如果您想要全局禁止zoom，可以添加以下样式 */
-    html {
-        touch-action: manipulation; /* 禁止双击缩放 */
-        -webkit-text-size-adjust: 100%; /* 禁止iOS自动调整字体大小 */
-    }
-
+    html { touch-action: manipulation; -webkit-text-size-adjust: 100%; }
     body { font-family: Arial, sans-serif; }
-    select, button, input[type="text"] { 
-        height: 40px;
-        -webkit-appearance: none; /* 移除iOS默认的外观 */
-        -webkit-text-size-adjust: 100%; /* 禁止iOS自动调整字体大小 */
-        font-size: 16px; /* 设置合适的字体大小 */
-        margin-bottom: 10px;
-    }
-    select, button {
-        padding: 10px;
-        width: 100%;
-    }
-    input[type="text"] {
-        width: 70%;
-    }
+    select, button, input[type="text"] { height: 40px; -webkit-appearance: none; -webkit-text-size-adjust: 100%; font-size: 16px; margin-bottom: 10px; }
+    select, button { padding: 10px; width: 100%; }
+    input[type="text"] { width: 70%; }
     button { cursor: pointer; }
     a { margin-right: 5px; text-decoration: none; color: blue; }
     a:hover { text-decoration: underline; }
     p { font-size: 16px; color: #666; }
-    h2 { color: #333; }
-    h3 { color: #666; }
+    h2, h3 { color: #333; }
     #saveImageButton { margin-top: 20px; }
-    #snapshotImage {
-        width: 50%;
-        height: auto;
-        margin-top: 20px;
-        border: 5px solid #ddd;
-    }
-    #snapshotImageContainer {
-        text-align: center;
-        color: crimson;
-        position: relative;
-        display: none;
-    }
-    p.notice {
-        color: crimson;
-    }
-    .snap {
-        color:deeppink;
-    }
+    #snapshotImage { width: 50%; height: auto; margin-top: 20px; border: 5px solid #ddd; }
+    #snapshotImageContainer { text-align: center; color: crimson; position: relative; display: none; }
+    p.notice { color: crimson; }
+    .snap { color: deeppink; }
+    .match { font-size: 0.8em; font-style: italic; }
+    table {font-size: 0.6em}
 </style>
 </head>
 <body>
 <h1>看房check list</h1>
-<span class="snap" style="display: none;"> checklist由此网址生成:</span>
+<span class="snap" style="display: none;">checklist由此网址生成:</span>
 <a class="snap" style="display: none;">https://site.tedzhou.tech/static/sease</a>
 
 <h2>0. 楼盘名称</h2>
@@ -71,49 +42,38 @@
     <option value="haizu">海珠区</option>
 </select>
 <br>
-
 <label for="school">选择小学:</label>
 <br>
 <select id="school" onchange="displayInfo()">
     <option value="">请选择小学</option>
 </select>
-
 <div id="result">
     <h2></h2>
 </div>
 
-<!-- 房子价值计算 -->
 <h2>2. 房子价值计算</h2>
-<p>房子价值估算公式为：<br>
-  <strong>房子价值 = 年租金 * 30 + 学位价值</strong><br>
-  其中年租金 = 月租金 * 12
-</p>
+<p>房子价值估算公式为：<br><strong>房子价值 = 年租金 * 30 + 学位价值</strong><br>其中年租金 = 月租金 * 12</p>
 <label for="monthlyRent">租金 (元/月):</label>
 <br>
 <input type="text" id="monthlyRent" placeholder="请输入租金">
 <br>
-
 <label for="price">总房价 (万元):</label>
 <br>
 <input type="text" id="price" placeholder="请输入总房价">
 <br>
-
 <label for="schoolValue">学位估值 (万元):</label>
 <br>
 <input type="text" id="schoolValue" placeholder="请输入学位估值">
 <br>
-
 <button onclick="calculateHouseValue()">估算房屋价值</button>
 <div id="houseValueResult"></div>
 
-<!-- 交通导航 -->
 <h2>3. 交通检查</h2>
 <p>请检查房产周边的交通情况，确保通勤便利。</p>
 <div id="nav" style="display: none;">
     <a href="iosamap://path?sourceApplication=applicationName&dname=广州T.I.T创意园">导航到广州T.I.T创意园</a>
     <a href="iosamap://path?sourceApplication=applicationName&dname=广州阿里中心">导航到广州阿里中心</a>
 </div>
-
 <label for="">地铁通行时间:</label>
 <br>
 <select id="metro_time">
@@ -133,7 +93,7 @@
     <option value="90min内">90min内</option>
     <option value="太远啦">太远啦</option>
 </select>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script>
 (function () {
     if (navigator.userAgent.indexOf("iPhone") > 0) {
@@ -146,8 +106,7 @@ let haizuData;
 function loadSchools() {
     const district = document.getElementById('district').value;
     const schoolSelect = document.getElementById('school');
-    schoolSelect.innerHTML = '<option value="">请选择小学</option>'; // 清空现有选项
-
+    schoolSelect.innerHTML = '<option value="">请选择小学</option>';
     if (district === 'liwan' && liwanData) {
         updateSchools(liwanData);
     } else if (district === 'haizu' && haizuData) {
@@ -181,7 +140,7 @@ function updateSchools(data) {
         });
         return acc;
     }, []);
-    schools.sort(); // Sort schools alphabetically
+    schools.sort();
     schools.forEach(school => {
         const option = document.createElement('option');
         option.value = school;
@@ -190,6 +149,76 @@ function updateSchools(data) {
     });
 }
 
+function calculateHouseValue() {
+    let wan = 10 * 1000;
+    const monthlyRent = parseFloat(document.getElementById('monthlyRent').value);
+    const schoolValue = parseFloat(document.getElementById('schoolValue').value) * wan;
+    const totalHousePrice = parseFloat(document.getElementById('price').value) * wan;
+    let houseValue = (monthlyRent * 12 * 30) + schoolValue;
+    let premium = ((totalHousePrice - houseValue) / houseValue) * 100;
+    document.getElementById('houseValueResult').innerHTML = `房子价值: ${(houseValue / wan).toFixed(2)}万元<br>溢价: ${premium.toFixed(2)}%`;
+}
+
+document.getElementById('district').addEventListener('change', loadSchools);
+
+// 定义名校信息存储对象
+const famousSchools = {};
+
+// 读取并解析CSV文件
+fetch('school.csv')
+.then(response => response.text())
+.then(data => {
+    Papa.parse(data, {
+        complete: (results) => {
+            results.data.forEach(row => {
+                const schoolName = row[2];
+                const level = row[0]; // 梯度作为级别
+                if (!famousSchools[schoolName]) {
+                    famousSchools[schoolName] = level;
+                }
+            });
+        }
+    });
+});
+
+// function displayInfo() {
+//     const schoolName = document.getElementById('school').value;
+//     const resultDiv = document.getElementById('result');
+//     if (!schoolName) {
+//         resultDiv.innerHTML = '<h3>请先选择一个小学</h3>';
+//         return;
+//     }
+
+//     const selectedDistrict = document.getElementById('district').value;
+//     const data = selectedDistrict === 'liwan' ? liwanData : haizuData;
+//     const groupInfo = Object.entries(data).find(([group, {elementarySchools}]) => elementarySchools.includes(schoolName));
+//     let similarSchoolsHtml = '';
+
+//     if (groupInfo) {
+//         const [group, {middleSchools}] = groupInfo;
+//         middleSchools.forEach(school => {
+//             let bestMatch = '';
+//             let bestMatchScore = 0;
+//             Object.keys(famousSchools).forEach(famousSchool => {
+//                 if (school.indexOf(famousSchool) >= 0) {
+//                     bestMatchScore = 1; // 使用indexOf匹配
+//                     bestMatch = famousSchool;
+//                 }
+//             });
+//             if (bestMatchScore > 0) {
+//                 similarSchoolsHtml += `<p style="color: red;">${school} <span class="match">(${famousSchools[bestMatch]})</span></p>`;
+//             } else {
+//                 similarSchoolsHtml += `<p>${school}</p>`;
+//             }
+//         });
+//         resultDiv.innerHTML = `
+//             <p>${schoolName} 所在的分组是 ${group}</p>
+//             <strong>对应的初中:</strong><br>${similarSchoolsHtml}
+//         `;
+//     } else {
+//         resultDiv.innerHTML = `<h3>${schoolName} 没有找到对应的分组信息。</h3>`;
+//     }
+// }
 function displayInfo() {
     const schoolName = document.getElementById('school').value;
     const resultDiv = document.getElementById('result');
@@ -201,35 +230,61 @@ function displayInfo() {
     const selectedDistrict = document.getElementById('district').value;
     const data = selectedDistrict === 'liwan' ? liwanData : haizuData;
     const groupInfo = Object.entries(data).find(([group, {elementarySchools}]) => elementarySchools.includes(schoolName));
+    let similarSchoolsHtml = '<table border="1"><tr><th>学校</th><th>等级</th><th>名校</th></tr>';
+
     if (groupInfo) {
         const [group, {middleSchools}] = groupInfo;
-        const middleSchoolLinks = middleSchools.map(school => 
-            `<p>${school}</p>`
-        ).join('');
+        middleSchools.forEach(school => {
+            let famousSchool = '';
+            let famousSchoolClass = '';
+            let color = 'black'; // 默认颜色
+            Object.keys(famousSchools).forEach(famous => {
+                if (school.indexOf(famous) >= 0) {
+                    famousSchool = famous;
+                    famousSchoolClass = famousSchools[famous];
+                    // 设置等级颜色
+                    switch (famousSchoolClass) {
+                        case '豪门队':
+                            color = 'red';
+                            break;
+                        case '一线':
+                            color = 'darkred';
+                            break;
+                        case '准一线':
+                            color = 'orange';
+                            break;
+                        case '二线':
+                            color = 'green';
+                            break;
+                        case '准二线':
+                            color = 'darkgreen';
+                            break;
+                        default:
+                            color = 'black';
+                    }
+                }
+            });
+            similarSchoolsHtml += `
+                <tr style="color: ${color};"">
+                    <td>${school}</td>
+                    <td>${famousSchoolClass}</td>
+                    <td>${school === famousSchool ? '' : famousSchool}</td>
+                </tr>
+            `;
+        });
+        similarSchoolsHtml += '</table>';
         resultDiv.innerHTML = `
-            <h3>${schoolName} 所在的分组是 ${group}</h3>
-            <strong>对应的初中:</strong><br>${middleSchoolLinks}
+            <strong>${schoolName} 所在的分组是 ${group}</strong>
+            ${similarSchoolsHtml}
         `;
     } else {
         resultDiv.innerHTML = `<h3>${schoolName} 没有找到对应的分组信息。</h3>`;
     }
 }
-function calculateHouseValue() {
-    // let million = 1000000;
-    let wan = 10 * 1000;
-    const monthlyRent = parseFloat(document.getElementById('monthlyRent').value);
-    const schoolValue = parseFloat(document.getElementById('schoolValue').value) * wan;
-    const totalHousePrice = parseFloat(document.getElementById('price').value) * wan;
-    let houseValue = (monthlyRent * 12 * 30) + schoolValue;
-    let premium = ((totalHousePrice - houseValue) / houseValue) * 100;
-    document.getElementById('houseValueResult').innerHTML = `房子价值: ${(houseValue / wan).toFixed(2)}万元<br>溢价: ${premium.toFixed(2)}%`;
-}
-
-document.getElementById('district').addEventListener('change', loadSchools);
 </script>
 <button id="saveImageButton">保存页面为图片</button>
 <div id="snapshotImageContainer">
-    <p class="notice"> ↓↓ 长按下面图片保存相册 ↓↓</p>
+    <p class="notice">↓↓ 长按下面图片保存相册 ↓↓</p>
     <img id="snapshotImage" src="" alt="页面快照">
 </div>
 <script src="html2canvas.js"></script>
@@ -248,15 +303,10 @@ document.getElementById('saveImageButton').addEventListener('click', function() 
         document.querySelectorAll('.snap').forEach(function(a){
             a.style.display = "none"
         });
-        // alert('图片已生成，长按图片保存到相册');
         var delay = 500;
-
-        // 使用setTimeout延迟执行滚动操作
         setTimeout(function() {
-            // 滚动到页面的最底部
             window.scrollTo(0, document.body.scrollHeight);
         }, delay);
-        
     });
 });
 </script>
